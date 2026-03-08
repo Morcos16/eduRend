@@ -97,7 +97,7 @@ void OurTestScene::Update(
 		mat4f::scaling(1.5, 1.5, 1.5);				// Scale uniformly to 150%
 
 	m_moon_transform = mat4f::translation(2, 0, 0) *			// No translation
-		mat4f::rotation(-m_angle, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
+		mat4f::rotation(-m_angle, 1.0f, 0.0f, 0.0f) *	// Rotate continuously around the y-axis
 		mat4f::scaling(0.5, 0.5, 0.5);				// Scale uniformly to 150%
 
 	m_satelite_transform = mat4f::translation(1, 0, 0) *			// No translation
