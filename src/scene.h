@@ -90,6 +90,8 @@ class OurTestScene : public Scene
 
 	mat4f m_sponza_transform;
 	mat4f m_cube_transform;
+	mat4f m_moon_transform;
+	mat4f m_satelite_transform;
 
 	mat4f m_view_matrix;
 	mat4f m_projection_matrix;
