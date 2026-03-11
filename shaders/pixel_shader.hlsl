@@ -1,3 +1,8 @@
+cbuffer CameraLightBuffer : register(b0)
+{
+	float4 CameraPos;
+	float4 LightPos;
+};
 
 Texture2D texDiffuse : register(t0);
 

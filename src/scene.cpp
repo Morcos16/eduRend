@@ -30,6 +30,7 @@ OurTestScene::OurTestScene(
 	Scene(dxdevice, dxdevice_context, window_width, window_height)
 { 
 	InitTransformationBuffer();
+	InitCameraLightBuffer();
 	// + init other CBuffers
 }
 
@@ -129,10 +130,13 @@ void OurTestScene::Render()
 {
 	// Bind transformation_buffer to slot b0 of the VS
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
+	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_camera_light_buffer);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
 	m_projection_matrix = m_camera->ProjectionMatrix();
+
+	UpdateCameraLightBuffer(linalg::vec4f(m_camera->GetPos(),0), linalg::vec4f(1, 2, 3, 0));
 
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
@@ -195,4 +199,26 @@ void OurTestScene::UpdateTransformationBuffer(
 	matrixBuffer->WorldToViewMatrix = WorldToViewMatrix;
 	matrixBuffer->ProjectionMatrix = ProjectionMatrix;
 	m_dxdevice_context->Unmap(m_transformation_buffer, 0);
+}
+
+void OurTestScene::InitCameraLightBuffer() {
+	HRESULT hr;
+	D3D11_BUFFER_DESC bufferDesc = { 0 };
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.ByteWidth = sizeof(CameraLightBuffer);
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&bufferDesc, nullptr, &m_camera_light_buffer));
+}
+
+void OurTestScene::UpdateCameraLightBuffer(vec4f camera_pos, vec4f light_pos) {
+	// Map the resource buffer, obtain a pointer and then write our matrices to it
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(m_camera_light_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	CameraLightBuffer* camBuffer = (CameraLightBuffer*)resource.pData;
+	camBuffer->CameraPos = camera_pos;
+	camBuffer->LightPos = light_pos;
+	m_dxdevice_context->Unmap(m_camera_light_buffer, 0);
 }
