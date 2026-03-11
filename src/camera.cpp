@@ -9,7 +9,8 @@ void Camera::MoveTo(const vec3f& position) noexcept
 
 void Camera::Move(const vec3f& direction) noexcept
 {
-	m_position += direction;
+	mat3f r = mat4f::rotation(0, m_yaw, m_pitch).get_3x3();
+	m_position += r*direction;
 }
 
 void Camera::Rotate(float yaw, float pitch) noexcept 
