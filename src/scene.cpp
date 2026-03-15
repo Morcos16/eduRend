@@ -145,7 +145,7 @@ void OurTestScene::Render()
 	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
 	UpdatePhongBuffer(
 		linalg::vec4f(0, 0, 1, 1),
-		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(1, 0, 0, 1),
 		linalg::vec4f(1, 0.7, 0.1, 1),
 		0.1, 0.7, 0.8, 30);
 	m_cube->Render();
@@ -153,7 +153,7 @@ void OurTestScene::Render()
 	UpdateTransformationBuffer(m_cube_transform * m_moon_transform, m_view_matrix, m_projection_matrix);
 	UpdatePhongBuffer(
 		linalg::vec4f(0, 0, 1, 1),
-		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(0, 0, 1, 1),
 		linalg::vec4f(1, 0.7, 0.1, 1),
 		0.1, 0.7, 0.8, 60);
 	m_cube->Render();
@@ -161,7 +161,7 @@ void OurTestScene::Render()
 	UpdateTransformationBuffer(m_cube_transform * m_moon_transform * m_satelite_transform, m_view_matrix, m_projection_matrix);
 	UpdatePhongBuffer(
 		linalg::vec4f(0, 0, 1, 1),
-		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(0, 1, 0, 1),
 		linalg::vec4f(1, 0.7, 0.1, 1),
 		0.1, 0.7, 0.8, 100);
 	m_cube->Render();
@@ -170,7 +170,7 @@ void OurTestScene::Render()
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	UpdatePhongBuffer(
 		linalg::vec4f(0, 0, 1, 1),
-		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(0.5, 0.5, 0.5, 1),
 		linalg::vec4f(1, 0.7, 0.1, 1),
 		0.1, 0.7, 0.8, 30);
 	m_sponza->Render();
