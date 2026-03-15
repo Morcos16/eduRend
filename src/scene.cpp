@@ -139,24 +139,40 @@ void OurTestScene::Render()
 	m_projection_matrix = m_camera->ProjectionMatrix();
 
 	UpdateCameraLightBuffer(linalg::vec4f(m_camera->GetPos(),0), linalg::vec4f(1, 2, 3, 0));
-	UpdatePhongBuffer(
-		linalg::vec4f(0, 0, 1, 1),
-		linalg::vec4f(0.3, 0.3, 0.3, 1),
-		linalg::vec4f(0.7, 0.7, 0.7, 1),
-		0.1, 0.7, 0.8, 30);
+	
 
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(1, 0.7, 0.1, 1),
+		0.1, 0.7, 0.8, 30);
 	m_cube->Render();
 
 	UpdateTransformationBuffer(m_cube_transform * m_moon_transform, m_view_matrix, m_projection_matrix);
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(1, 0.7, 0.1, 1),
+		0.1, 0.7, 0.8, 60);
 	m_cube->Render();
 
 	UpdateTransformationBuffer(m_cube_transform * m_moon_transform * m_satelite_transform, m_view_matrix, m_projection_matrix);
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(1, 0.7, 0.1, 1),
+		0.1, 0.7, 0.8, 100);
 	m_cube->Render();
 
 	// Load matrices + Sponza's transformation to the device and render it
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(0.5, 0.4, 0.3, 1),
+		linalg::vec4f(1, 0.7, 0.1, 1),
+		0.1, 0.7, 0.8, 30);
 	m_sponza->Render();
 }
 
