@@ -31,6 +31,7 @@ OurTestScene::OurTestScene(
 { 
 	InitTransformationBuffer();
 	InitCameraLightBuffer();
+	InitPhongBuffer();
 	// + init other CBuffers
 }
 
@@ -131,12 +132,18 @@ void OurTestScene::Render()
 	// Bind transformation_buffer to slot b0 of the VS
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_camera_light_buffer);
+	m_dxdevice_context->PSSetConstantBuffers(1, 1, &m_phong_buffer);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
 	m_projection_matrix = m_camera->ProjectionMatrix();
 
 	UpdateCameraLightBuffer(linalg::vec4f(m_camera->GetPos(),0), linalg::vec4f(1, 2, 3, 0));
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(0.3, 0.3, 0.3, 1),
+		linalg::vec4f(0.7, 0.7, 0.7, 1),
+		0.1, 0.7, 0.8, 30);
 
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
@@ -221,4 +228,40 @@ void OurTestScene::UpdateCameraLightBuffer(vec4f camera_pos, vec4f light_pos) {
 	camBuffer->CameraPos = camera_pos;
 	camBuffer->LightPos = light_pos;
 	m_dxdevice_context->Unmap(m_camera_light_buffer, 0);
+}
+
+void OurTestScene::InitPhongBuffer() {
+	HRESULT hr;
+	D3D11_BUFFER_DESC bufferDesc = { 0 };
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.ByteWidth = sizeof(PhongBuffer);
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&bufferDesc, nullptr, &m_phong_buffer));
+}
+
+void OurTestScene::UpdatePhongBuffer(
+	vec4f ambient_color,
+	vec4f diffuse_color,
+	vec4f specular_color,
+	float ambient_ammount,
+	float diffuse_ammount,
+	float specular_ammount,
+	float shininess
+	)
+{
+	// Map the resource buffer, obtain a pointer and then write our matrices to it
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(m_phong_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	PhongBuffer* phongBuffer = (PhongBuffer*)resource.pData;
+	phongBuffer->AmbientColor = ambient_color;
+	phongBuffer->DiffuseColor = diffuse_color;
+	phongBuffer->SpecularColor = specular_color;
+	phongBuffer->AmbientAmmount = ambient_ammount;
+	phongBuffer->DiffuseAmmount = diffuse_ammount;
+	phongBuffer->SpecularAmmount = specular_ammount;
+	phongBuffer->Shininess = shininess;
+	m_dxdevice_context->Unmap(m_phong_buffer, 0);
 }

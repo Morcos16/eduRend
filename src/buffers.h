@@ -21,3 +21,13 @@ struct CameraLightBuffer
 	linalg::vec4f CameraPos;
 	linalg::vec4f LightPos;
 };
+struct PhongBuffer
+{
+	linalg::vec4f AmbientColor;
+	linalg::vec4f DiffuseColor;
+	linalg::vec4f SpecularColor;
+	float AmbientAmmount;
+	float DiffuseAmmount;
+	float SpecularAmmount;
+	float Shininess;
+};

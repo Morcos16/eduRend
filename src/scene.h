@@ -79,6 +79,7 @@ class OurTestScene : public Scene
 	// CBuffer for transformation matrices
 	ID3D11Buffer* m_transformation_buffer = nullptr;
 	ID3D11Buffer* m_camera_light_buffer = nullptr;
+	ID3D11Buffer* m_phong_buffer = nullptr;
 	// + other CBuffers
 
 	//
@@ -110,6 +111,18 @@ class OurTestScene : public Scene
 	void InitCameraLightBuffer();
 
 	void UpdateCameraLightBuffer(vec4f camera_pos, vec4f light_pos);
+
+	void UpdatePhongBuffer(
+		vec4f ambient_color,
+		vec4f diffuse_color,
+		vec4f specular_color,
+		float ambient_ammount,
+		float diffuse_ammount,
+		float specular_ammount,
+		float shininess
+	);
+
+	void InitPhongBuffer();
 
 public:
 	/**
