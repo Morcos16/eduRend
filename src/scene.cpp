@@ -50,6 +50,7 @@ void OurTestScene::Init()
 	m_camera->MoveTo({ 0, 0, 5 });
 
 	//// Create objects
+	m_OBJ_sphere = new OBJModel("assets/sphere/sphere.obj", m_dxdevice, m_dxdevice_context);
 	//m_cube = new QuadModel(m_dxdevice, m_dxdevice_context);
 	m_cube = new Cube(m_dxdevice, m_dxdevice_context);
 	m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
@@ -110,6 +111,10 @@ void OurTestScene::Update(
 	m_sponza_transform = mat4f::translation(0, -5, 0) *		 // Move down 5 units
 		mat4f::rotation(fPI / 2, 0.0f, 1.0f, 0.0f) * // Rotate pi/2 radians (90 degrees) around y
 		mat4f::scaling(0.05f);						 // The scene is quite large so scale it down to 5%
+
+	m_OBJ_sphere_transform = mat4f::translation(0, 3, 0) *			// No translation
+		mat4f::rotation(-m_angle * 0.6, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
+		mat4f::scaling(1.5, 1.5, 1.5);				// Scale uniformly to 150%
 
 	// Increment the rotation angle.
 	m_angle += m_angular_velocity * dt;
@@ -174,6 +179,15 @@ void OurTestScene::Render()
 		linalg::vec4f(1, 0.7, 0.1, 1),
 		0.1, 0.7, 0.8, 30);
 	m_sponza->Render();
+
+	//sphere
+	UpdateTransformationBuffer(m_OBJ_sphere_transform, m_view_matrix, m_projection_matrix);
+	UpdatePhongBuffer(
+		linalg::vec4f(0, 0, 1, 1),
+		linalg::vec4f(1, 0, 0, 1),
+		linalg::vec4f(1, 0.7, 0.1, 1),
+		0.1, 0.7, 0.8, 30);
+	m_OBJ_sphere->Render();
 }
 
 void OurTestScene::Release()
